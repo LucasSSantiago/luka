@@ -1,3 +1,8 @@
+@import "tailwindcss";
+
+@source "../views";
+@source "../js";
+
 /* ==========================================================================
    Luka - global CSS
 
@@ -159,7 +164,7 @@ a {
   color: var(--color-page);
 }
 
-:focus-visible {
+:where(a, button, summary, [role='button'], [tabindex]:not([tabindex='-1'])):focus-visible {
   outline: 3px solid var(--color-focus-ring);
   outline-offset: 3px;
 }

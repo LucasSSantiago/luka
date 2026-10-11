@@ -1,61 +1,37 @@
-@layouts.auth()
-  <h1 class="auth__title">Create your account</h1>
-  <p class="auth__sub">Start building with the starter kit.</p>
-  @form({
-    route: 'new_account.store',
-    method: 'POST',
-    class: 'auth__form',
-    'x-data': '{ submitting: false }',
-    'x-on:submit': 'submitting = true',
-  })
-    @field.root({ name: 'fullName' })
-      @!field.label({ text: 'Full name' })
-      @!input.control({ autocomplete: 'name', placeholder: 'Ada Lovelace' })
-      @!field.error()
-    @end
-    @field.root({ name: 'email' })
-      @!field.label({ text: 'Email' })
-      @!input.control({
-        type: 'email',
-        autocomplete: 'email',
-        placeholder: 'you@example.com',
-      })
-      @!field.error()
-    @end
-    @field.root({ name: 'password' })
-      @!field.label({ text: 'Password' })
-      @!input.control({
-        type: 'password',
-        autocomplete: 'new-password',
-        placeholder: '••••••••',
-      })
-      @!field.error()
-    @end
-    @field.root({ name: 'passwordConfirmation' })
-      @!field.label({ text: 'Confirm password' })
-      @!input.control({
-        type: 'password',
-        autocomplete: 'new-password',
-        placeholder: '••••••••',
-      })
-      @!field.error()
-    @end
-    @!button({
-      text: 'Create account',
-      type: 'submit',
-      block: true,
-      style: 'margin-top: 4px;',
-      'x-bind:disabled': 'submitting',
-      'x-text': "submitting ? 'One moment…' : 'Create account'",
-    })
-  @end
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadastro - Luka</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+  </head>
+  <body>
+    <main class="min-h-screen bg-[var(--color-page)] px-6 py-16 text-[var(--color-text)]">
+      <div class="mx-auto flex max-w-xl flex-col gap-6">
+        <div>
+          <p class="text-sm font-semibold text-[var(--color-primary)]">Input</p>
+          <h1 class="mt-2 text-2xl font-semibold">Preview do componente</h1>
+        </div>
 
-  <p class="auth__foot">
-    
-    Already have an account?
+        @!ui.input({
+          name: 'email',
+          type: 'email',
+          placeholder: 'voce@exemplo.com',
+        })
 
-    @link({ route: 'session.create', class: 'il' })
-      Sign in
-    @end
-  </p>
-@end
+        @!ui.input({
+          name: 'password',
+          type: 'password',
+          placeholder: 'Sua senha',
+        })
+
+        @!ui.input({
+          name: 'disabledExample',
+          placeholder: 'Campo desabilitado',
+          disabled: true,
+        })
+      </div>
+    </main>
+  </body>
+</html>

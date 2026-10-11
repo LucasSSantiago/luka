@@ -1,0 +1,26 @@
+@let(name = $props.get('name'))
+@let(type = $props.get('type', 'text'))
+@let(id = $props.get('id', name))
+@let(errors = flashMessages.get('inputErrorsBag', {})[name] ?? [])
+@let(hasErrors = errors.length > 0)
+@let(shouldKeepOldValue = !['password', 'file'].includes(type))
+@let(inputValue = shouldKeepOldValue ? old(name, $props.get('value', '')) : '')
+
+<input {{
+  $props
+    .merge({
+      id,
+      name,
+      type,
+      value: inputValue,
+      class: [
+        'h-14 w-full rounded-lg border-2 bg-[var(--color-page)] px-4 text-sm text-[var(--color-text-soft)] outline-none transition-colors placeholder:text-[var(--color-text-muted)]',
+        'hover:border-[var(--color-primary-soft)] focus:border-[var(--color-primary)] focus:outline-none focus:ring-0',
+        'disabled:cursor-not-allowed disabled:opacity-60',
+        hasErrors ? 'border-[var(--color-danger)]' : 'border-[var(--color-border)]',
+      ],
+      'aria-invalid': hasErrors ? 'true' : false,
+      'aria-describedby': hasErrors ? `${id}-error` : false,
+    })
+    .toAttrs()
+}} />
