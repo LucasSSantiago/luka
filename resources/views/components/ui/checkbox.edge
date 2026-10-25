@@ -1,0 +1,30 @@
+@let(name = $props.get('name'))
+@let(id = $props.get('id', name))
+@let(label = $props.get('label'))
+
+<div class="flex items-start gap-2">
+  <input
+    type="checkbox"
+    {{
+      $props
+        .except(['label', 'type'])
+        .merge({
+          name,
+          id,
+          value: '1',
+          class: [
+            'size-4 shrink-0 accent-[var(--color-primary)]',
+            'disabled:cursor-not-allowed disabled:opacity-60',
+          ],
+        })
+        .toAttrs()
+    }}
+  />
+
+  <label
+    for="{{ id }}"
+    class="text-sm text-[var(--color-text-soft)]"
+  >
+    {{ label }}
+  </label>
+</div>

@@ -1,5 +1,10 @@
+@let(isDarkTheme =
+  request.plainCookie('app_theme', {
+    defaultValue: 'light',
+    encoded: false,
+  }) === 'dark')
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="light">
+<html lang="pt-BR" data-theme="{{ isDarkTheme ? 'dark' : 'light' }}">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,31 +12,117 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
   </head>
   <body>
-    <main class="min-h-screen bg-[var(--color-page)] px-6 py-16 text-[var(--color-text)]">
-      <div class="mx-auto flex max-w-xl flex-col gap-6">
-        <div>
-          <p class="text-sm font-semibold text-[var(--color-primary)]">Input</p>
-          <h1 class="mt-2 text-2xl font-semibold">Preview do componente</h1>
+    <main
+      class="relative flex min-h-screen items-center justify-center overflow-hidden bg-[var(--color-page)] px-6 py-10"
+    >
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute -left-64 -top-72 size-[48rem] rounded-full bg-[var(--color-primary-soft)] opacity-30"
+      ></div>
+
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute -bottom-48 -right-48 size-[36rem] rounded-full bg-[var(--color-accent)] opacity-40"
+      ></div>
+
+      <section
+        class="relative z-10 w-full max-w-md rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 shadow-[var(--shadow-soft)]"
+        aria-labelledby="signup-title"
+      >
+        <header class="flex flex-col gap-2">
+          <img
+            src="/images/Logo-Theme={{ isDarkTheme ? 'Dark' : 'Light' }}.svg"
+            alt="Luka"
+            width="112"
+            height="40"
+            class="h-8 w-auto self-start"
+          />
+
+          <h1 id="signup-title" class="text-2xl font-semibold text-[var(--color-text)]">
+            Comece seu momento de cuidado.
+          </h1>
+
+          <p class="text-sm text-[var(--color-text-muted)]">
+            Crie sua conta e cuide de mente e corpo.
+          </p>
+        </header>
+
+        <div class="mt-6 flex flex-col gap-4">
+          @ui.field({
+            name: 'fullName',
+            label: 'Nome'
+          })
+          @!ui.input({
+            name: 'fullName',
+            type: 'text',
+            placeholder: 'Nome completo',
+            autocomplete: 'name',
+            required: true,
+          })
+          @end
+
+          @ui.field({
+            name: 'email',
+            label: 'E-mail'
+          })
+          @!ui.input({
+            name: 'email',
+            type: 'email',
+            placeholder: 'voce@exemplo.com',
+            autocomplete: 'email',
+            required: true,
+          })
+          @end
+
+          @ui.field({
+            name: 'password',
+            label: 'Senha'
+          })
+          @!ui.input({
+            name: 'password',
+            type: 'password',
+            placeholder: 'senha',
+            autocomplete: 'new-password',
+            required: true,
+          })
+          @end
+
+          @ui.field({
+            name: 'passwordConfirmation',
+            label: 'Confirmar senha'
+          })
+          @!ui.input({
+            name: 'passwordConfirmation',
+            type: 'password',
+            placeholder: 'confirmar senha',
+            autocomplete: 'new-password',
+            required: true,
+          })
+          @end
+
+          @!ui.checkbox({
+            name: 'terms',
+            label: 'Li e aceito os termos de uso.',
+            required: true,
+          })
+
+          @!ui.button({
+            text: 'Criar minha conta',
+            type: 'submit',
+            class: 'w-full'
+          })
         </div>
 
-        @!ui.input({
-          name: 'email',
-          type: 'email',
-          placeholder: 'voce@exemplo.com',
-        })
-
-        @!ui.input({
-          name: 'password',
-          type: 'password',
-          placeholder: 'Sua senha',
-        })
-
-        @!ui.input({
-          name: 'disabledExample',
-          placeholder: 'Campo desabilitado',
-          disabled: true,
-        })
-      </div>
+        <p class="mt-6 text-center text-sm text-[var(--color-text-muted)]">
+          já tem uma conta?
+          <a
+            href="{{ urlFor('session.create') }}"
+            class="font-semibold text-[var(--color-primary)] hover:underline"
+          >
+            Entrar
+          </a>
+        </p>
+      </section>
     </main>
   </body>
 </html>

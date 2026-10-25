@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @source "../views";
 @source "../js";
@@ -78,6 +78,7 @@
   --color-text-muted: var(--palette-ink-muted);
   --color-border: var(--palette-border);
   --color-primary: var(--palette-soft-periwinkle);
+  --color-on-primary: var(--palette-ink);
   --color-primary-hover: #806cff;
   --color-primary-soft: var(--palette-periwinkle);
   --color-accent: var(--palette-peach-fuzz);
@@ -114,9 +115,6 @@
   box-sizing: border-box;
 }
 
-* {
-  margin: 0;
-}
 
 html {
   min-height: 100%;
@@ -143,20 +141,15 @@ canvas {
   max-width: 100%;
 }
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-
 button {
   cursor: pointer;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 ::selection {
@@ -216,7 +209,7 @@ a {
   border: 1px solid transparent;
   border-radius: var(--radius-pill);
   background: var(--color-primary);
-  color: #181522;
+  color: var(--color-on-primary);
   font-weight: 700;
   transition:
     background-color 160ms ease,
@@ -225,12 +218,17 @@ a {
     transform 160ms ease;
 }
 
-.button:hover {
+.button:enabled:hover {
   background: var(--color-primary-hover);
 }
 
-.button:active {
+.button:enabled:active {
   transform: translateY(1px);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .button--secondary {
@@ -239,7 +237,7 @@ a {
   color: var(--color-text);
 }
 
-.button--secondary:hover {
+.button--secondary:enabled:hover {
   background: var(--color-surface-soft);
 }
 

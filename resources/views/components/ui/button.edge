@@ -1,0 +1,13 @@
+@let(text = $props.get('text', 'Continuar'))
+
+<button {{
+  $props
+    .except(['text'])
+    .merge({
+      type: 'button',
+      class: ['button'],
+    })
+    .toAttrs()
+}}>
+  {{ text }}
+</button>
