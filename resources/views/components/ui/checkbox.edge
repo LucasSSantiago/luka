@@ -1,30 +1,48 @@
 @let(name = $props.get('name'))
 @let(id = $props.get('id', name))
 @let(label = $props.get('label'))
+@let(errors = flashMessages.get('inputErrorsBag', {})[name] ?? [])
+@let(hasErrors = errors.length > 0)
 
-<div class="flex items-start gap-2">
-  <input
-    type="checkbox"
-    {{
-      $props
-        .except(['label', 'type'])
-        .merge({
-          name,
-          id,
-          value: '1',
-          class: [
-            'size-4 shrink-0 accent-[var(--color-primary)]',
-            'disabled:cursor-not-allowed disabled:opacity-60',
-          ],
-        })
-        .toAttrs()
-    }}
-  />
+<div class="flex flex-col gap-2">
+  <div class="flex items-start gap-2">
+    <input
+      type="checkbox"
+      {{
+        $props
+          .except(['label', 'type'])
+          .merge({
+            name,
+            id,
+            value: '1',
+            class: [
+              'size-4 shrink-0 accent-[var(--color-primary)]',
+              'disabled:cursor-not-allowed disabled:opacity-60',
+            ],
+            'aria-invalid': hasErrors ? 'true' : false,
+            'aria-describedby' : hasErrors ? `${id}-error` : false,
+          })
+          .toAttrs()
+      }}
+    />
 
-  <label
-    for="{{ id }}"
-    class="text-sm text-[var(--color-text-soft)]"
-  >
-    {{ label }}
-  </label>
+    <label
+      for="{{ id }}"
+      class="text-sm text-[var(--color-text-soft)]"
+    >
+      {{ label }}
+    </label>
+  </div>
+
+  @if(hasErrors)
+    <div
+      id="{{ id }}-error"
+      class="text-sm text-[var(--color-danger)]"
+    >
+      @each(message in errors)
+        <p> {{ message }} </p>
+
+      @end
+    </div>
+  @end
 </div>
