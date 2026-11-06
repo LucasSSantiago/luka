@@ -1,49 +1,150 @@
-@layouts.auth()
-  <h1 class="auth__title">Welcome back</h1>
-  <p class="auth__sub">Sign in to continue building.</p>
-  @form({
-    route: 'session.store',
-    method: 'POST',
-    class: 'auth__form',
-    'x-data': '{ submitting: false }',
-    'x-on:submit': 'submitting = true',
-  })
-    @field.root({ name: 'email' })
-      @!field.label({ text: 'Email' })
-      @!input.control({
-        type: 'email',
-        autocomplete: 'username',
-        placeholder: 'you@example.com',
-      })
-      @!field.error()
-    @end
-    @field.root({ name: 'password' })
-      @!field.label({ text: 'Password' })
-      @!input.control({
-        type: 'password',
-        autocomplete: 'current-password',
-        placeholder: '••••••••',
-      })
-      @!field.error()
-    @end
-    @!button({
-      text: 'Sign in',
-      type: 'submit',
-      block: true,
-      style: 'margin-top: 4px;',
-      'x-bind:disabled': 'submitting',
-      'x-text': "submitting ? 'One moment…' : 'Sign in'",
-    })
-  @end
-
-  <p class="auth__foot">
-    
-
-    New here?
+@let(isDarkTheme =
+  request.plainCookie('app_theme', { defaultValue: 'light', encoded: false }) === 'dark')
+@let(loginError = flashMessages.get('error'))
+@let(loginErrorMessages = {
+  'Invalid user credentials':
+    'E-mail ou senha incorretos. Confira seus dados e tente novamente.',
+  'Invalid or expired CSRF token': 'Sua sessão expirou. Tente entrar novamente.',
+})
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="{{ isDarkTheme ? 'dark' : 'light' }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Entrar — Luka</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+  </head>
+  <body>
+    <main class="login-page">
+      <a href="{{ urlFor('home') }}" class="login-back">
+        @svg('lucide:arrow-left', { width: 20, height: 20, 'aria-hidden': 'true' })
 
 
-    @link({ route: 'new_account.create', class: 'il' })
-      Create an account
-    @end
-  </p>
-@end
+        Voltar para a home
+
+
+      </a>
+      <section class="login-card" aria-labelledby="login-title">
+        <header>
+          <img
+            src="/images/Logo-Theme={{ isDarkTheme ? 'Dark' : 'Light' }}.svg"
+            class="login-logo"
+            alt="Luka"
+            width="112"
+            height="40"
+          />
+          <h1 id="login-title" class="login-title">Bom ter você por aqui.</h1>
+          <p class="login-subtitle">Entre para continuar sua rotina de bem-estar.</p>
+        </header>
+        {{-- POST tradicional: validação, credenciais e sessão ficam no SessionController. --}}
+        @form({
+          route: 'session.store',
+          method: 'POST',
+          class: 'login-form',
+          'x-data': '{ submitting: false, showPassword: false }',
+          'x-on:submit': 'submitting = true',
+          'x-on:pageshow.window': 'submitting = false',
+          'x-bind:aria-busy': 'submitting',
+        })
+          @if(loginError)
+            <p class="login-error" role="alert">
+              {{ loginErrorMessages[loginError] ?? loginError }}
+            </p>
+          @end
+
+          <div class="login-fields">
+            @ui.field({ name: 'email', label: 'E-mail' })
+              @!ui.input({
+                name: 'email',
+                type: 'email',
+                placeholder: 'voce@exemplo.com',
+                autocomplete: 'username',
+                inputmode: 'email',
+                autocapitalize: 'none',
+                spellcheck: 'false',
+                maxlength: 254,
+                required: true,
+              })
+            @end
+            @ui.field({ name: 'password', label: 'Senha' })
+              <div class="login-password">
+                @!ui.input({
+                  name: 'password',
+                  type: 'password',
+                  placeholder: '••••••••',
+                  autocomplete: 'current-password',
+                  required: true,
+                  'x-bind:type': "showPassword ? 'text' : 'password'",
+                })
+                <button
+                  type="button"
+                  class="login-visibility"
+                  aria-label="Mostrar senha"
+                  aria-controls="password"
+                  x-bind:aria-label="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
+                  x-bind:aria-pressed="showPassword"
+                  x-on:click="showPassword = !showPassword"
+                  x-cloak
+                >
+                  <span x-show="!showPassword">
+                    @svg('lucide:eye', {
+                      width: 24,
+                      height: 24,
+                      'aria-hidden': 'true',
+                      'stroke-width': 1.5,
+                    })
+                  </span>
+                  <span x-show="showPassword" x-cloak>
+                    @svg('lucide:eye-off', {
+                      width: 24,
+                      height: 24,
+                      'aria-hidden': 'true',
+                      'stroke-width': 1.5,
+                    })
+                  </span>
+                </button>
+              </div>
+            @end
+          </div>
+          {{-- O guard atual não usa remember-me e ainda não existe rota de recuperação. --}}
+          <div class="login-options">
+            @!ui.checkbox({
+              name: 'rememberMe',
+              label: 'Lembrar de mim',
+              disabled: false,
+              'aria-describedby': 'login-session-help',
+            })
+            <button
+              type="button"
+              class="login-recovery"
+              disabled
+              aria-describedby="login-session-help"
+            >
+              Esqueci minha senha
+            </button>
+            <span id="login-session-help" class="sr-only">
+              Lembrar de mim e recuperação de senha ainda não estão disponíveis.
+            </span>
+          </div>
+          @!ui.button({
+            text: 'Entrar',
+            type: 'submit',
+            class: 'login-submit',
+            'x-bind:disabled': 'submitting',
+            'x-text': "submitting ? 'Entrando…' : 'Entrar'",
+          })
+        @end
+
+        <p class="login-footer">
+          <a href="{{ urlFor('new_account.create') }}">Ainda não tem conta? Cadastre-se</a>
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
