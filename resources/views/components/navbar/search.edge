@@ -1,0 +1,26 @@
+@let(searchRoute = $props.get('route'))
+@let(searchLabel = $props.get('label', 'Buscar vídeos ou criadores'))
+<form
+  action="{{ searchRoute ? urlFor(searchRoute) : urlFor('home') }}"
+  method="GET"
+  role="search"
+  aria-label="{{ searchLabel }}"
+  class="relative w-full"
+  x-data="{ canSearch: {{ !!searchRoute }} }"
+  x-on:submit="if (!canSearch) $event.preventDefault()"
+>
+  <label for="navbar-search" class="sr-only">{{ searchLabel }}</label>
+  <span class="pointer-events-none absolute top-3.5 left-4 text-[var(--color-text-muted)]">
+    @svg('lucide:search', { width: 20, height: 20, 'aria-hidden': 'true' })
+  </span>
+  @!ui.input({
+    id: 'navbar-search',
+    name: 'q',
+    type: 'search',
+    value: $props.get('value', ''),
+    placeholder: $props.get('placeholder', searchLabel),
+    maxlength: 200,
+    class:
+      'h-12! rounded-lg! border! pr-4! pl-11!',
+  })
+</form>
