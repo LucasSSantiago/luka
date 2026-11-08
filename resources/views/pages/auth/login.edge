@@ -6,6 +6,9 @@
     'E-mail ou senha incorretos. Confira seus dados e tente novamente.',
   'Invalid or expired CSRF token': 'Sua sessão expirou. Tente entrar novamente.',
 })
+@let(loginThemeClasses = isDarkTheme
+  ? '[--login-link:var(--color-primary)] [--login-shadow:var(--shadow-soft)]'
+  : '[--color-text:#28223f] [--color-text-soft:#28223f] [--color-text-muted:#71677f] [--color-border:#ded8ff] [--color-on-primary:#28223f] [--login-link:#6555b8] [--login-shadow:0_16px_48px_rgb(40_34_63_/_8%)]')
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="{{ isDarkTheme ? 'dark' : 'light' }}">
   <head>
@@ -21,44 +24,66 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
   </head>
   <body>
-    <main class="login-page">
-      <a href="{{ urlFor('home') }}" class="login-back">
+    <main
+      class="relative isolate grid min-h-svh place-items-center overflow-hidden bg-[var(--color-page)] px-6 py-26 text-[var(--color-text)] max-[600px]:px-5 max-[600px]:pt-24 max-[600px]:pb-10 {{ loginThemeClasses }}"
+    >
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute -top-[280px] -left-[360px] -z-10 size-[1120px] rounded-full bg-[var(--color-primary-soft)] opacity-30"
+      ></div>
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute -right-[270px] -bottom-[300px] -z-10 size-[700px] rounded-full bg-[var(--color-accent)] {{ isDarkTheme ? 'opacity-[0.04]' : 'opacity-40' }}"
+      ></div>
+      <a
+        href="{{ urlFor('home') }}"
+        class="absolute top-[46px] left-16 inline-flex items-center gap-2 text-sm leading-6 text-[var(--color-text-muted)] hover:text-[var(--login-link)] max-[600px]:top-7 max-[600px]:left-6"
+      >
         @svg('lucide:arrow-left', { width: 20, height: 20, 'aria-hidden': 'true' })
-
-
-        Voltar para a home
-
-
+        <span>Voltar para a home</span>
       </a>
-      <section class="login-card" aria-labelledby="login-title">
+      <section
+        class="w-full max-w-[536px] rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] py-12 pr-[46px] pl-12 [box-shadow:var(--login-shadow)] max-[600px]:rounded-3xl max-[600px]:px-6 max-[600px]:py-8"
+        aria-labelledby="login-title"
+      >
         <header>
           <img
             src="/images/Logo-Theme={{ isDarkTheme ? 'Dark' : 'Light' }}.svg"
-            class="login-logo"
+            class="h-10 w-28"
             alt="Luka"
             width="112"
             height="40"
           />
-          <h1 id="login-title" class="login-title">Bom ter você por aqui.</h1>
-          <p class="login-subtitle">Entre para continuar sua rotina de bem-estar.</p>
+          <h1
+            id="login-title"
+            class="mt-6 text-[28px] leading-9 font-bold tracking-normal max-[600px]:text-[25px] max-[600px]:leading-8"
+          >
+            Bom ter você por aqui.
+          </h1>
+          <p class="mt-3 text-sm leading-5 text-[var(--color-text-muted)]">
+            Entre para continuar sua rotina de bem-estar.
+          </p>
         </header>
         {{-- POST tradicional: validação, credenciais e sessão ficam no SessionController. --}}
         @form({
           route: 'session.store',
           method: 'POST',
-          class: 'login-form',
+          class: 'mt-6',
           'x-data': '{ submitting: false, showPassword: false }',
           'x-on:submit': 'submitting = true',
           'x-on:pageshow.window': 'submitting = false',
           'x-bind:aria-busy': 'submitting',
         })
           @if(loginError)
-            <p class="login-error" role="alert">
+            <p
+              class="mb-5 rounded-lg border border-current px-4 py-3 text-sm leading-5 text-[var(--color-danger)]"
+              role="alert"
+            >
               {{ loginErrorMessages[loginError] ?? loginError }}
             </p>
           @end
 
-          <div class="login-fields">
+          <div class="flex flex-col gap-5 [&_label]:text-[var(--color-text)]">
             @ui.field({ name: 'email', label: 'E-mail' })
               @!ui.input({
                 name: 'email',
@@ -70,21 +95,25 @@
                 spellcheck: 'false',
                 maxlength: 254,
                 required: true,
+                class:
+                  'rounded-lg! border! motion-reduce:transition-none aria-invalid:border-[var(--color-danger)]!',
               })
             @end
             @ui.field({ name: 'password', label: 'Senha' })
-              <div class="login-password">
+              <div class="relative">
                 @!ui.input({
                   name: 'password',
                   type: 'password',
                   placeholder: '••••••••',
                   autocomplete: 'current-password',
                   required: true,
+                  class:
+                    'rounded-lg! border! pr-13! motion-reduce:transition-none aria-invalid:border-[var(--color-danger)]!',
                   'x-bind:type': "showPassword ? 'text' : 'password'",
                 })
                 <button
                   type="button"
-                  class="login-visibility"
+                  class="absolute top-1.5 right-1 grid size-11 place-items-center rounded-md text-[var(--color-text-muted)] hover:text-[var(--login-link)]"
                   aria-label="Mostrar senha"
                   aria-controls="password"
                   x-bind:aria-label="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
@@ -113,16 +142,26 @@
             @end
           </div>
           {{-- O guard atual não usa remember-me e ainda não existe rota de recuperação. --}}
-          <div class="login-options">
+          <div
+            class="group relative mt-5 flex flex-wrap items-center gap-3.5 [&>div>div]:items-center [&>div>div]:gap-3 [&_label]:cursor-pointer [&_label]:text-xs [&_label]:leading-5 [&_label]:text-[var(--color-text-muted)]"
+          >
             @!ui.checkbox({
               name: 'rememberMe',
               label: 'Lembrar de mim',
               disabled: false,
+              class:
+                'm-0 size-5! cursor-pointer! appearance-none rounded-[7px] border border-[var(--color-border)] bg-[var(--color-surface)] opacity-100! checked:border-[var(--color-primary)] checked:bg-[var(--color-primary)]',
               'aria-describedby': 'login-session-help',
             })
+            <span
+              aria-hidden="true"
+              class="pointer-events-none absolute top-0 left-0 hidden size-5 items-center justify-center text-[var(--color-on-primary)] group-has-checked:flex"
+            >
+              @svg('lucide:check', { width: 14, height: 14, 'stroke-width': 2.5 })
+            </span>
             <button
               type="button"
-              class="login-recovery"
+              class="ml-auto cursor-default! text-xs leading-5 text-[var(--login-link)]"
               disabled
               aria-describedby="login-session-help"
             >
@@ -135,14 +174,20 @@
           @!ui.button({
             text: 'Entrar',
             type: 'submit',
-            class: 'login-submit',
+            class:
+              'mt-5 min-h-12 w-full rounded-lg! text-sm leading-5 font-medium! motion-reduce:transition-none!',
             'x-bind:disabled': 'submitting',
             'x-text': "submitting ? 'Entrando…' : 'Entrar'",
           })
         @end
 
-        <p class="login-footer">
-          <a href="{{ urlFor('new_account.create') }}">Ainda não tem conta? Cadastre-se</a>
+        <p class="mt-6 text-center text-sm leading-5">
+          <a
+            href="{{ urlFor('new_account.create') }}"
+            class="text-[var(--login-link)] underline-offset-3 hover:underline"
+          >
+            Ainda não tem conta? Cadastre-se
+          </a>
         </p>
       </section>
     </main>

@@ -1,25 +1,22 @@
-@let(currentTheme = request.plainCookie('app_theme', {
-  defaultValue: 'light',
-  encoded: false,
-}))
+@let(currentTheme =
+  request.plainCookie('app_theme', { defaultValue: 'light', encoded: false }) === 'dark'
+    ? 'dark'
+    : 'light')
 
 <button
   type="button"
-  class="iconbtn"
+  class="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-transparent text-[var(--color-text-muted)] hover:border-[var(--color-border)] hover:bg-[var(--color-page)] hover:text-[var(--color-text)] sm:size-10"
   data-initial-theme="{{ currentTheme }}"
   x-data="themeToggle"
-  x-bind:aria-label="theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
-  x-bind:title="theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
+  aria-label="{{ currentTheme === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro' }}"
+  x-bind:aria-label="theme === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'"
+  x-bind:aria-pressed="theme === 'dark'"
   x-on:click="toggle"
 >
-  @svg('lucide:sun', {
-    width: 16,
-    height: 16,
-    class: 'themetoggle__icon themetoggle__icon--sun',
-  })
-  @svg('lucide:moon', {
-    width: 16,
-    height: 16,
-    class: 'themetoggle__icon themetoggle__icon--moon',
-  })
+  <span x-show="theme === 'dark'" x-cloak>
+    @svg('lucide:sun', { width: 20, height: 20, 'aria-hidden': 'true' })
+  </span>
+  <span x-show="theme === 'light'" x-cloak>
+    @svg('lucide:moon', { width: 20, height: 20, 'aria-hidden': 'true' })
+  </span>
 </button>

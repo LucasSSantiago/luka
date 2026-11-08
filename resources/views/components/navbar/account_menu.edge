@@ -1,0 +1,38 @@
+{{-- O usuário vem da sessão, verificada pelo middleware silent_auth. --}}
+@if(auth.user)
+  <details
+    class="relative"
+    x-data="{}"
+    x-on:click.outside="$el.removeAttribute('open')"
+    x-on:keydown.escape.prevent.stop="$el.removeAttribute('open'); $refs.toggle.focus()"
+  >
+    <summary
+      x-ref="toggle"
+      aria-label="Abrir opções da conta"
+      class="flex size-10 cursor-pointer list-none items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-primary-soft)] text-sm font-semibold text-[var(--color-text)] [&::-webkit-details-marker]:hidden"
+    >
+      @!avatar({ initials: auth.user.initials, 'aria-hidden': 'true' })
+    </summary>
+    <div
+      class="absolute top-12 right-0 w-56 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-[var(--shadow-soft)]"
+    >
+      <p class="truncate px-3 py-2 text-sm font-semibold">{{ auth.user.fullName }}</p>
+      @if($props.get('route'))
+        @link({
+          route: $props.get('route'),
+          class: 'block rounded-lg px-3 py-2 text-sm hover:bg-[var(--color-page)]',
+        })
+          {{ $props.get('label', 'Meu perfil') }}
+        @end
+      @end
+      @form({ route: 'session.destroy', method: 'POST' })
+        @!ui.button({
+          text: 'Sair',
+          type: 'submit',
+          class:
+            'min-h-10! w-full justify-start! rounded-lg! bg-transparent! px-3! text-sm text-[var(--color-text)]! font-medium! hover:bg-[var(--color-page)]!',
+        })
+      @end
+    </div>
+  </details>
+@end
