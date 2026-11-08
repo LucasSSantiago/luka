@@ -23,3 +23,30 @@ export class UserSchema extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 }
+
+export class VideoSchema extends BaseModel {
+  static $columns = ['blobName', 'contentType', 'createdAt', 'description', 'id', 'originalFilename', 'sizeBytes', 'status', 'title', 'updatedAt', 'userId'] as const
+  $columns = VideoSchema.$columns
+  @column()
+  declare blobName: string
+  @column()
+  declare contentType: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare originalFilename: string
+  @column()
+  declare sizeBytes: bigint | number | null
+  @column()
+  declare status: string
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare userId: number
+}
