@@ -1,53 +1,20 @@
-{{-- Passe apenas nomes de rotas que já existam; sem destino, a ação fica indisponível. --}}
-@let(exploreRoute = $props.get('exploreRoute'))
-@let(creatorsRoute = $props.get('creatorsRoute'))
+{{-- Cada destino pode ser conectado quando sua rota estiver disponível. --}}
 @let(publishRoute = $props.get('publishRoute'))
-{{-- Sete colunas; o espaço restante é distribuído igualmente entre os elementos do frame. --}}
-@let(desktopGridClasses = auth.user
-  ? 'xl:grid-cols-[112px_56px_72px_400px_40px_40px_40px] xl:gap-x-[calc((100%_-_760px)/6)]'
-  : 'xl:grid-cols-[112px_56px_72px_400px_40px_80px_136px] xl:gap-x-[calc((100%_-_896px)/6)]')
-<header
-  class="relative z-20 border-b border-[var(--color-border)] bg-[var(--color-surface)] xl:border-b-0"
->
+<header class="relative z-20 border-b border-[var(--color-border)] bg-[var(--color-surface)]">
   <div
-    class="grid w-full grid-cols-[auto_1fr] items-center gap-x-3 gap-y-3 px-5 py-4 sm:gap-x-6 sm:px-8 xl:h-24 xl:gap-y-0 xl:px-6 xl:py-0 {{ desktopGridClasses }}"
+    class="grid w-full grid-cols-[auto_1fr] items-center gap-x-2 gap-y-3 px-4 py-4 sm:gap-x-6 sm:px-6 md:grid-cols-[auto_1fr_auto] lg:grid-cols-[auto_auto_minmax(200px,1fr)_auto] lg:gap-x-8"
   >
-    @!logo({ size: 40, class: '[&_img]:h-8 [&_img]:w-auto xl:[&_img]:h-10' })
+    @!logo({ size: 36, class: '[&_img]:h-8 [&_img]:w-auto sm:[&_img]:h-9' })
 
     <nav
       aria-label="Navegação principal"
-      class="col-span-2 row-start-2 flex items-center gap-6 text-sm sm:col-span-1 xl:col-span-2 xl:col-start-2 xl:row-start-1 xl:grid xl:grid-cols-subgrid xl:gap-x-[normal]"
+      class="col-span-2 row-start-3 flex items-center gap-1 border-t border-[var(--color-border)] pt-3 md:col-span-1 md:col-start-2 md:row-start-1 md:ml-2 md:translate-y-1 md:border-0 md:pt-0 lg:ml-0"
     >
-      @if(exploreRoute)
-        @navLink({
-          route: exploreRoute,
-          class:
-            'rounded-sm text-[var(--color-text-soft)] hover:text-[var(--color-primary)] aria-[current=page]:font-semibold aria-[current=page]:text-[var(--color-primary)]',
-        })
-          Explorar
-        @end
-      @else
-        <span aria-disabled="true" class="text-[var(--color-text-muted)]">
-          Explorar<span class="sr-only">— em breve</span>
-        </span>
-      @end
-      @if(creatorsRoute)
-        @navLink({
-          route: creatorsRoute,
-          class:
-            'rounded-sm text-[var(--color-text-soft)] hover:text-[var(--color-primary)] aria-[current=page]:font-semibold aria-[current=page]:text-[var(--color-primary)]',
-        })
-          Criadores
-        @end
-      @else
-        <span aria-disabled="true" class="text-[var(--color-text-muted)]">
-          Criadores<span class="sr-only">— em breve</span>
-        </span>
-      @end
+      @!navbar.item({ label: 'Explorar', route: $props.get('exploreRoute') })
     </nav>
 
     <div
-      class="col-span-2 row-start-3 min-w-0 sm:col-span-1 sm:col-start-2 sm:row-start-2 xl:col-start-4 xl:row-start-1"
+      class="col-span-2 row-start-2 min-w-0 md:col-span-3 md:col-start-1 lg:col-span-1 lg:col-start-3 lg:row-start-1 lg:w-full lg:max-w-[520px] lg:justify-self-center"
     >
       @!navbar.search({
         route: $props.get('searchRoute'),
@@ -56,49 +23,53 @@
     </div>
 
     <div
-      class="col-start-2 row-start-1 flex items-center justify-self-end gap-1 sm:gap-3 xl:col-span-3 xl:col-start-5 xl:grid xl:grid-cols-subgrid xl:justify-self-stretch xl:gap-x-[normal]"
+      class="col-start-2 row-start-1 flex items-center justify-self-end gap-1 sm:gap-3 md:col-start-3 lg:col-start-4"
     >
       @!themeToggle()
-      @if(auth.user)
-        @if(publishRoute)
-          @link({
-            route: publishRoute,
-            'aria-label': 'Publicar vídeo',
-            class:
-              'inline-flex size-10 items-center justify-center rounded-lg bg-[var(--color-primary)] text-[var(--color-on-primary)] hover:bg-[var(--color-primary-hover)]',
-          })
-            @svg('lucide:plus', { width: 20, height: 20, 'aria-hidden': 'true' })
+      <div
+        class="flex items-center gap-1 sm:gap-2"
+      >
+        @if(auth.user)
+          @if(publishRoute)
+            @link({
+              route: publishRoute,
+              'aria-label': 'Publicar vídeo',
+              class:
+                'inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-[var(--color-on-primary)] transition-colors hover:bg-[var(--color-primary-hover)]',
+            })
+              @svg('lucide:plus', { width: 20, height: 20, 'aria-hidden': 'true' })
+            @end
+          @else
+            <button
+              type="button"
+              disabled
+              aria-label="Publicar vídeo — em breve"
+              class="inline-flex size-10 shrink-0 cursor-default! items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-page)] text-[var(--color-text-muted)]"
+            >
+              @svg('lucide:plus', { width: 20, height: 20, 'aria-hidden': 'true' })
+            </button>
           @end
+          @!navbar.accountMenu({
+            route: $props.get('accountRoute'),
+            label: $props.get('accountLabel', 'Ver perfil'),
+          })
         @else
-          <button
-            type="button"
-            disabled
-            aria-label="Publicar vídeo — em breve"
-            class="inline-flex size-10 cursor-default! items-center justify-center rounded-lg border border-[var(--color-border)] text-[var(--color-text-muted)]"
-          >
-            @svg('lucide:plus', { width: 20, height: 20, 'aria-hidden': 'true' })
-          </button>
+          @link({
+            route: 'session.create',
+            class:
+              'inline-flex h-9 shrink-0 items-center justify-center rounded-full px-2 text-xs font-medium text-[var(--color-text-soft)] transition-colors hover:bg-[var(--color-page)] hover:text-[var(--color-text)] sm:h-10 sm:px-4 sm:text-sm',
+          })
+            Entrar
+          @end
+          @link({
+            route: 'new_account.create',
+            class:
+              'inline-flex h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-[var(--color-primary)] px-3 text-xs font-semibold text-[var(--color-on-primary)] transition-colors hover:bg-[var(--color-primary-hover)] sm:h-10 sm:px-5 sm:text-sm',
+          })
+            Criar conta
+          @end
         @end
-        @!navbar.accountMenu({
-          route: $props.get('accountRoute'),
-          label: $props.get('accountLabel', 'Meu perfil'),
-        })
-      @else
-        @link({
-          route: 'session.create',
-          class:
-            'rounded-lg px-2 py-2 text-xs text-[var(--color-text-soft)] hover:text-[var(--color-primary)] sm:px-3 sm:text-sm xl:flex xl:h-12 xl:w-20 xl:items-center xl:justify-center xl:p-0',
-        })
-          Entrar
-        @end
-        @link({
-          route: 'new_account.create',
-          class:
-            'whitespace-nowrap rounded-lg bg-[var(--color-primary)] px-2 py-2 text-xs font-semibold text-[var(--color-on-primary)] hover:bg-[var(--color-primary-hover)] sm:px-4 sm:text-sm xl:flex xl:h-12 xl:w-[136px] xl:items-center xl:justify-center xl:p-0',
-        })
-          Criar conta
-        @end
-      @end
+      </div>
     </div>
   </div>
 </header>

@@ -5,7 +5,7 @@
 
 <button
   type="button"
-  class="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-transparent text-[var(--color-text-muted)] hover:border-[var(--color-border)] hover:bg-[var(--color-page)] hover:text-[var(--color-text)] sm:size-10"
+  class="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-transparent bg-[var(--color-page)] text-[var(--color-text-muted)] transition-colors hover:border-[var(--color-border)] hover:text-[var(--color-text)] sm:size-10"
   data-initial-theme="{{ currentTheme }}"
   x-data="themeToggle"
   aria-label="{{ currentTheme === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro' }}"
