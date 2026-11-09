@@ -6,9 +6,7 @@ import Video from '#models/video'
 import { hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 
-
 export default class User extends compose(UserSchema, withAuthFinder(hash)) {
-
   @hasMany(() => Video)
   declare videos: HasMany<typeof Video>
 

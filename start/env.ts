@@ -24,4 +24,8 @@ export default await Env.create(new URL('../', import.meta.url), {
 
   // Session
   SESSION_DRIVER: Env.schema.enum(['cookie', 'memory', 'database'] as const),
+
+  // Azure Blob Storage
+  AZURE_STORAGE_ACCOUNT_URL: Env.schema.string({ format: 'url' }),
+  AZURE_STORAGE_CONTAINER: Env.schema.string(),
 })

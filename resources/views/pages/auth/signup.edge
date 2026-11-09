@@ -50,72 +50,66 @@
         <form
           action="{{ urlFor('new_account.store') }}"
           method="POST"
-          class="mt-6 flex flex-col gap-4">
-
+          class="mt-6 flex flex-col gap-4"
+        >
           {{ csrfField() }}
-
           @ui.field({
             name: 'fullName',
-            label: 'Nome'
+            label: 'Nome',
           })
-          @!ui.input({
-            name: 'fullName',
-            type: 'text',
-            placeholder: 'Nome completo',
-            autocomplete: 'name',
-            required: true,
-          })
+            @!ui.input({
+              name: 'fullName',
+              type: 'text',
+              placeholder: 'Nome completo',
+              autocomplete: 'name',
+              required: true,
+            })
           @end
-
           @ui.field({
             name: 'email',
-            label: 'E-mail'
+            label: 'E-mail',
           })
-          @!ui.input({
-            name: 'email',
-            type: 'email',
-            placeholder: 'voce@exemplo.com',
-            autocomplete: 'email',
-            required: true,
-          })
+            @!ui.input({
+              name: 'email',
+              type: 'email',
+              placeholder: 'voce@exemplo.com',
+              autocomplete: 'email',
+              required: true,
+            })
           @end
-
           @ui.field({
             name: 'password',
-            label: 'Senha'
+            label: 'Senha',
           })
-          @!ui.input({
-            name: 'password',
-            type: 'password',
-            placeholder: 'senha',
-            autocomplete: 'new-password',
-            required: true,
-          })
+            @!ui.input({
+              name: 'password',
+              type: 'password',
+              placeholder: 'senha',
+              autocomplete: 'new-password',
+              required: true,
+            })
           @end
-
           @ui.field({
             name: 'passwordConfirmation',
-            label: 'Confirmar senha'
+            label: 'Confirmar senha',
           })
-          @!ui.input({
-            name: 'passwordConfirmation',
-            type: 'password',
-            placeholder: 'confirmar senha',
-            autocomplete: 'new-password',
-            required: true,
-          })
+            @!ui.input({
+              name: 'passwordConfirmation',
+              type: 'password',
+              placeholder: 'confirmar senha',
+              autocomplete: 'new-password',
+              required: true,
+            })
           @end
-
           @!ui.checkbox({
             name: 'terms',
             label: 'Li e aceito os termos de uso.',
             required: true,
           })
-
           @!ui.button({
             text: 'Criar minha conta',
             type: 'submit',
-            class: 'w-full'
+            class: 'w-full',
           })
         </form>
 

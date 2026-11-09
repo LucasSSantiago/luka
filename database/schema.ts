@@ -25,7 +25,19 @@ export class UserSchema extends BaseModel {
 }
 
 export class VideoSchema extends BaseModel {
-  static $columns = ['blobName', 'contentType', 'createdAt', 'description', 'id', 'originalFilename', 'sizeBytes', 'status', 'title', 'updatedAt', 'userId'] as const
+  static $columns = [
+    'blobName',
+    'contentType',
+    'createdAt',
+    'description',
+    'id',
+    'originalFilename',
+    'sizeBytes',
+    'status',
+    'title',
+    'updatedAt',
+    'userId',
+  ] as const
   $columns = VideoSchema.$columns
   @column()
   declare blobName: string
