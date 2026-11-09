@@ -20,28 +20,18 @@
               'disabled:cursor-not-allowed disabled:opacity-60',
             ],
             'aria-invalid': hasErrors ? 'true' : false,
-            'aria-describedby' : hasErrors ? `${id}-error` : false,
+            'aria-describedby': hasErrors ? `${id}-error` : false,
           })
           .toAttrs()
       }}
     />
 
-    <label
-      for="{{ id }}"
-      class="text-sm text-[var(--color-text-soft)]"
-    >
-      {{ label }}
-    </label>
+    <label for="{{ id }}" class="text-sm text-[var(--color-text-soft)]">{{ label }}</label>
   </div>
-
   @if(hasErrors)
-    <div
-      id="{{ id }}-error"
-      class="text-sm text-[var(--color-danger)]"
-    >
+    <div id="{{ id }}-error" class="text-sm text-[var(--color-danger)]">
       @each(message in errors)
-        <p> {{ message }} </p>
-
+        <p>{{ message }}</p>
       @end
     </div>
   @end

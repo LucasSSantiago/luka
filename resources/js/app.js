@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs'
+import initVideoUpload from './video_upload.js'
 
 Alpine.data('alert', function () {
   return {
@@ -31,5 +32,7 @@ Alpine.data('themeToggle', function () {
     },
   }
 })
+
+initVideoUpload()
 
 Alpine.start()
