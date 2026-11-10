@@ -7,8 +7,8 @@
   'Invalid or expired CSRF token': 'Sua sessão expirou. Tente entrar novamente.',
 })
 @let(loginThemeClasses = isDarkTheme
-  ? '[--login-link:var(--color-primary)] [--login-shadow:var(--shadow-soft)]'
-  : '[--color-text:#28223f] [--color-text-soft:#28223f] [--color-text-muted:#71677f] [--color-border:#ded8ff] [--color-on-primary:#28223f] [--login-link:#6555b8] [--login-shadow:0_16px_48px_rgb(40_34_63_/_8%)]')
+  ? '[--login-link:var(--color-primary)]'
+  : '[--login-link:#6555b8]')
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="{{ isDarkTheme ? 'dark' : 'light' }}">
   <head>
@@ -29,11 +29,11 @@
     >
       <div
         aria-hidden="true"
-        class="pointer-events-none absolute -top-[280px] -left-[360px] -z-10 size-[1120px] rounded-full bg-[var(--color-primary-soft)] opacity-30"
+        class="pointer-events-none absolute -left-64 -top-72 -z-10 size-[48rem] rounded-full bg-[var(--color-primary-soft)] opacity-30"
       ></div>
       <div
         aria-hidden="true"
-        class="pointer-events-none absolute -right-[270px] -bottom-[300px] -z-10 size-[700px] rounded-full bg-[var(--color-accent)] {{ isDarkTheme ? 'opacity-[0.04]' : 'opacity-40' }}"
+        class="pointer-events-none absolute -bottom-48 -right-48 -z-10 size-[36rem] rounded-full bg-[var(--color-accent)] opacity-40"
       ></div>
       <a
         href="{{ urlFor('home') }}"
@@ -43,7 +43,7 @@
         <span>Voltar para a home</span>
       </a>
       <section
-        class="w-full max-w-[536px] rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] py-12 pr-[46px] pl-12 [box-shadow:var(--login-shadow)] max-[600px]:rounded-3xl max-[600px]:px-6 max-[600px]:py-8"
+        class="relative z-10 w-full max-w-md rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 shadow-[var(--shadow-soft)]"
         aria-labelledby="login-title"
       >
         <header>

@@ -1,0 +1,19 @@
+@let(label = $props.get('label'))
+@let(route = $props.get('route'))
+@let(itemClasses =
+  'inline-flex h-10 shrink-0 items-center justify-center rounded-full px-3 text-sm font-medium transition-colors')
+@if(route)
+  @navLink({
+    route,
+    class: [
+      itemClasses,
+      'text-[var(--color-text-soft)] hover:bg-[var(--color-page)] hover:text-[var(--color-text)] aria-[current=page]:bg-[var(--color-page)] aria-[current=page]:text-[var(--color-primary)]',
+    ],
+  })
+    {{ label }}
+  @end
+@else
+  <span aria-disabled="true" class="{{ itemClasses }} text-[var(--color-text-muted)]">
+    {{ label }}<span class="sr-only">— em breve</span>
+  </span>
+@end

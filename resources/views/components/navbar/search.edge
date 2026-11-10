@@ -10,7 +10,7 @@
   x-on:submit="if (!canSearch) $event.preventDefault()"
 >
   <label for="navbar-search" class="sr-only">{{ searchLabel }}</label>
-  <span class="pointer-events-none absolute top-3.5 left-4 text-[var(--color-text-muted)]">
+  <span class="pointer-events-none absolute top-3 left-4 text-[var(--color-text-muted)]">
     @svg('lucide:search', { width: 20, height: 20, 'aria-hidden': 'true' })
   </span>
   @!ui.input({
@@ -20,6 +20,7 @@
     value: $props.get('value', ''),
     placeholder: $props.get('placeholder', searchLabel),
     maxlength: 200,
-    class: 'h-12! rounded-lg! border! pr-4! pl-11!',
+    class:
+      'h-11! rounded-full! border! pr-4! pl-11! focus:ring-2! focus:ring-[var(--color-focus-ring)]!',
   })
 </form>
