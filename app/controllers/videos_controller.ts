@@ -2,6 +2,7 @@ import AzureBlobService from '#services/azure_blob_service'
 import { initiateVideoUploadValidator } from '#validators/video'
 import type { HttpContext } from '@adonisjs/core/http'
 import { randomUUID } from 'node:crypto'
+import Video from '#models/video'
 
 export default class VideosController {
   private readonly storage = new AzureBlobService()
@@ -95,5 +96,19 @@ export default class VideosController {
 
       throw error
     }
+  }
+
+  async show({ params, view, response }: HttpContext) {
+    const video = await Video.query().where('id', params.id).where('status', 'ready').preload('user').firstOrFail()
+
+    const playbackUrl = await this.storage.generateReadUrl(video.blobName)
+
+    response.header('Cache-Control', 'no-store')
+    response.header('Referrer-Policy', 'no-referrer')
+
+    return view.render('pages/videos/show', {
+      video,
+      playbackUrl
+    })
   }
 }

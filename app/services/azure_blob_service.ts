@@ -66,4 +66,32 @@ export default class AzureBlobService {
       contentType: properties.contentType,
     }
   }
+
+  async generateReadUrl(blobName: string) {
+  const now = Date.now()
+  const startsOn = new Date(now - 5 * 60 * 1000)
+  const expiresOn = new Date(now + 2 * 60 * 60 * 1000)
+
+  const delegationKey = await this.blobServiceClient.getUserDelegationKey(
+    startsOn,
+    expiresOn
+  )
+
+  const sas = generateBlobSASQueryParameters(
+    {
+      containerName: this.containerClient.containerName,
+      blobName,
+      permissions: BlobSASPermissions.parse('r'),
+      protocol: SASProtocol.Https,
+      startsOn,
+      expiresOn,
+    },
+    delegationKey,
+    this.blobServiceClient.accountName
+  ).toString()
+
+  const blobClient = this.containerClient.getBlobClient(blobName)
+
+  return `${blobClient.url}?${sas}`
+}
 }

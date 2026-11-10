@@ -28,3 +28,7 @@ router
     router.get('/videos/upload', [controllers.Videos, 'create']).as('videos.upload')
   })
   .use(middleware.auth())
+
+  router
+  .get('/videos/:id/watch', [controllers.Videos, 'show'])
+  .as('videos.show')

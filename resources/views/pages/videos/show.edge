@@ -1,0 +1,30 @@
+@layouts.marketing({
+  navbar: { publishRoute: 'videos.upload' },
+})
+  <main class="mx-auto w-full max-w-5xl px-5 py-10">
+    <article class="flex flex-col gap-4">
+      <h1 class="text-2xl font-semibold text-[var(--color-text)]">
+        {{ video.title }}
+      </h1>
+
+      <video
+        controls
+        playsinline
+        preload="metadata"
+        aria-label="{{ video.title }}"
+        class="aspect-video w-full rounded-xl bg-black"
+      >
+        <source src="{{ playbackUrl }}" type="video/mp4" />
+        Seu navegador não oferece suporte à reprodução de vídeos.
+      </video>
+
+      <p class="text-sm text-[var(--color-text-muted)]">
+        Publicado por {{ video.user.fullName }}
+      </p>
+
+      @if(video.description)
+        <p class="whitespace-pre-line text-[var(--color-text)]">{{ video.description }}</p>
+      @end
+    </article>
+  </main>
+@end
