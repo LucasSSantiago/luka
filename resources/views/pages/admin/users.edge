@@ -1,0 +1,81 @@
+@let(firstUser = users.all().length ? (users.currentPage - 1) * users.perPage + 1 : 0)
+@let(lastUser = users.all().length ? firstUser + users.all().length - 1 : 0)
+@let(pageLinkClasses = 'inline-flex h-12 min-w-28 items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-[var(--color-page)]')
+
+@layouts.marketing()
+  <section aria-labelledby="users-title" class="mx-auto flex w-full max-w-[1440px] flex-col gap-8 px-4 py-10 sm:px-6 lg:p-[72px]">
+    <header class="flex flex-col gap-8">
+      <h1 id="users-title" class="text-3xl font-bold leading-tight text-[var(--color-text)] sm:text-4xl sm:leading-[52px]">
+        Usuários da plataforma
+      </h1>
+      <p class="text-base leading-[23px] text-[var(--color-text-muted)]">
+        Consulte as contas cadastradas e seus vídeos.
+      </p>
+    </header>
+
+    <nav aria-label="Navegação administrativa" class="flex gap-4">
+      @link({ route: 'admin.users.index', 'aria-current': 'page', class: 'inline-flex h-12 w-40 items-center justify-center rounded-xl bg-[var(--color-primary)] px-4 text-sm font-medium text-[var(--color-on-primary)]' })
+        Usuários
+      @end
+      @!ui.button({ text: 'Vídeos', disabled: true, 'aria-label': 'Vídeos — em breve', class: 'h-12 w-40 cursor-default! rounded-xl! border-[var(--color-border)]! bg-[var(--color-surface)]! text-sm font-medium! text-[var(--color-text)]! opacity-100!' })
+    </nav>
+
+    @form({ route: 'admin.users.index', role: 'search', 'aria-label': 'Buscar usuários', class: 'flex w-full max-w-[876px] flex-col gap-4 sm:flex-row' })
+      <label for="users-search" class="sr-only">Buscar por nome ou e-mail</label>
+      @!ui.input({ id: 'users-search', name: 'search', type: 'search', value: search, maxlength: 200, placeholder: 'Buscar por nome ou e-mail', class: 'h-12! min-w-0 flex-1 rounded-xl! border! font-normal' })
+      @!ui.button({ text: 'Buscar', type: 'submit', class: 'h-12 shrink-0 rounded-xl! text-sm font-medium! sm:w-30' })
+    @end
+
+    <div role="region" aria-label="Tabela de usuários" tabindex="0" class="overflow-x-auto rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]">
+      <table class="w-full min-w-[900px] table-fixed border-collapse text-left text-sm leading-5 text-[var(--color-text)]">
+        <caption class="sr-only">Contas cadastradas na plataforma Luka</caption>
+        <thead class="bg-[var(--color-page)] text-xs leading-[17px] text-[var(--color-text-muted)]">
+          <tr class="[&>th]:px-6 [&>th]:py-6 [&>th]:font-medium">
+            <th scope="col" class="w-[28%]">Nome</th>
+            <th scope="col" class="w-[32%]">E-mail</th>
+            <th scope="col" class="w-[10%]">Vídeos</th>
+            <th scope="col" class="w-[16%]">Papel</th>
+            <th scope="col" class="w-[14%]">Cadastro</th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(user in users.all())
+            <tr class="[&>td]:px-6 [&>td]:py-6">
+              <td class="wrap-anywhere font-medium">{{ user.fullName || 'Sem nome' }}</td>
+              <td class="wrap-anywhere">{{ user.email }}</td>
+              <td>{{ user.$extras.videos_count }}</td>
+              <td>{{ user.isAdmin ? 'Administrador' : 'Usuário' }}</td>
+              <td><time datetime="{{ user.createdAt.toISODate() }}">{{ user.createdAt.toFormat('dd/MM/yyyy') }}</time></td>
+            </tr>
+          @else
+            <tr>
+              <td colspan="5" class="px-6 py-12 text-center text-[var(--color-text-muted)]">
+                {{ search ? 'Nenhum usuário encontrado para esta busca.' : 'Nenhum usuário nesta página.' }}
+              </td>
+            </tr>
+          @end
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex flex-col gap-4 text-sm text-[var(--color-text-muted)] sm:flex-row sm:items-center sm:justify-between">
+      <p role="status">Mostrando {{ firstUser }}–{{ lastUser }} de {{ users.total }} usuários</p>
+      <nav aria-label="Paginação de usuários" class="flex gap-4">
+        @if(users.getPreviousPageUrl())
+          @link({ href: users.getPreviousPageUrl(), rel: 'prev', class: pageLinkClasses })
+            Anterior
+          @end
+        @else
+          @!ui.button({ text: 'Anterior', disabled: true, class: 'h-12 min-w-28 cursor-default! rounded-xl! border-[var(--color-border)]! bg-[var(--color-surface)]! text-sm font-medium! text-[var(--color-text-muted)]! opacity-100!' })
+        @end
+        @if(users.getNextPageUrl())
+          @link({ href: users.getNextPageUrl(), rel: 'next', class: pageLinkClasses })
+            Próxima
+          @end
+        @else
+          @!ui.button({ text: 'Próxima', disabled: true, class: 'h-12 min-w-28 cursor-default! rounded-xl! border-[var(--color-border)]! bg-[var(--color-surface)]! text-sm font-medium! text-[var(--color-text-muted)]! opacity-100!' })
+        @end
+      </nav>
+    </div>
+  </section>
+@end

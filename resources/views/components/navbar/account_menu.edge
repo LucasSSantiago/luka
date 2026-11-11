@@ -28,6 +28,14 @@
           {{ $props.get('label', 'Ver perfil') }}
         </button>
       @end
+      @if(auth.user.isAdmin)
+        @link({
+          route: 'admin.users.index',
+          class: 'block rounded-lg px-3 py-2 text-sm hover:bg-[var(--color-page)]',
+        })
+          Administrar
+        @end
+      @end
       @form({ route: 'session.destroy', method: 'POST' })
         @!ui.button({
           text: 'Sair',
