@@ -1,0 +1,39 @@
+@let(items = [
+  { label: 'Sobre', route: $props.get('aboutRoute') },
+  { label: 'Fale conosco', route: $props.get('contactRoute') },
+  { label: 'Termos e condições', route: $props.get('termsRoute') },
+  { label: 'Política de privacidade', route: $props.get('privacyRoute') },
+])
+
+<footer class="mt-10 shrink-0 border-t border-[var(--color-border)] bg-[var(--color-surface)]">
+  <div class="px-4 py-2 sm:px-6">
+    <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-12">
+      <div class="space-y-1">
+        @!logo({ size: 30 })
+        <p class="text-xs text-[var(--color-text-muted)]">© 2026 Luka. All rights reserved.</p>
+      </div>
+
+      <nav aria-label="Navegação do rodapé" class="md:ml-auto">
+        <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm leading-5 md:justify-end">
+          @each(item in items)
+            <li>
+              @if(item.route)
+                @link({
+                  route: item.route,
+                  class:
+                    'rounded-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-primary)]',
+                })
+                  {{ item.label }}
+                @end
+              @else
+                <span aria-disabled="true" class="text-[var(--color-text-muted)]">
+                  {{ item.label }}
+                </span>
+              @end
+            </li>
+          @end
+        </ul>
+      </nav>
+    </div>
+  </div>
+</footer>
