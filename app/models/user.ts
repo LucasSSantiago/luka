@@ -17,4 +17,8 @@ export default class User extends compose(UserSchema, withAuthFinder(hash)) {
     }
     return `${first.slice(0, 2)}`.toUpperCase()
   }
+
+  get isAdmin() {
+    return this.role === 'admin'
+  }
 }
