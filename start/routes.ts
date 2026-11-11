@@ -4,7 +4,7 @@ import router from '@adonisjs/core/services/router'
 const AdminUsersController = () =>
   import('#controllers/admin/users_controller')
 
-router.on('/').render('pages/home').as('home')
+router.get('/', [controllers.Videos, 'index']).as('home')
 
 router
   .group(() => {

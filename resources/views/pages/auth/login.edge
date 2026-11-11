@@ -15,12 +15,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Entrar — Luka</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
+    @include('partials/fonts')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
   </head>
   <body>
@@ -181,12 +176,13 @@
           })
         @end
 
-        <p class="mt-6 text-center text-sm leading-5">
+        <p class="mt-6 text-center text-sm text-[var(--color-text-muted)]">
+          Ainda não tem conta?
           <a
             href="{{ urlFor('new_account.create') }}"
-            class="text-[var(--login-link)] underline-offset-3 hover:underline"
+            class="font-semibold text-[var(--color-primary)] hover:underline"
           >
-            Ainda não tem conta? Cadastre-se
+            Cadastre-se
           </a>
         </p>
       </section>

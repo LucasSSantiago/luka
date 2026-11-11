@@ -1,5 +1,5 @@
 {{-- Cada destino pode ser conectado quando sua rota estiver disponível. --}}
-@let(publishRoute = $props.get('publishRoute'))
+@let(publishRoute = $props.get('publishRoute', 'videos.upload'))
 <header class="relative z-20 border-b border-[var(--color-border)] bg-[var(--color-surface)]">
   <div
     class="grid w-full grid-cols-[auto_1fr] items-center gap-x-2 gap-y-3 px-4 py-4 sm:gap-x-6 sm:px-6 md:grid-cols-[auto_1fr_auto] lg:grid-cols-[auto_auto_minmax(200px,1fr)_auto] lg:gap-x-8"
@@ -26,9 +26,7 @@
       class="col-start-2 row-start-1 flex items-center justify-self-end gap-1 sm:gap-3 md:col-start-3 lg:col-start-4"
     >
       @!themeToggle()
-      <div
-        class="flex items-center gap-1 sm:gap-2"
-      >
+      <div class="flex items-center gap-1 sm:gap-2">
         @if(auth.user)
           @if(publishRoute)
             @link({

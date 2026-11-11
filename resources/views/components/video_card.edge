@@ -1,0 +1,92 @@
+{{--
+  Props: title, author, publishedAt, duration, route e routeParams.
+  author: nome de quem publicou. publishedAt: DateTime do Luxon (video.createdAt).
+
+  thumbnail: capa opcional do vídeo; sem ela, usa a arte padrão.
+  href: alternativa a route/routeParams. Sem destino, o card não tem link.
+--}}
+@let(title = $props.get('title', ''))
+@let(duration = $props.get('duration'))
+@let(author = $props.get('author'))
+@let(publishedAt = $props.get('publishedAt'))
+@let(thumbnail = $props.get('thumbnail'))
+@let(hasLink = $props.get('href') || $props.get('route'))
+
+<article {{
+  $props
+    .except([
+      'title',
+      'category',
+      'duration',
+      'author',
+      'publishedAt',
+      'thumbnail',
+      'href',
+      'route',
+      'routeParams',
+    ])
+    .merge({
+      class: [
+        'relative flex w-full min-w-0 flex-col rounded-[20px] border border-[#e1dbf2] bg-[var(--palette-white)] dark:border-[#49405f] dark:bg-[#211d35]',
+      ],
+    })
+    .toAttrs()
+}}>
+  <div class="relative h-[216px] shrink-0 overflow-hidden rounded-[20px]">
+    @if(thumbnail)
+      <img
+        src="{{ thumbnail }}"
+        alt=""
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full object-cover"
+      />
+    @else
+      <div class="video-cover__art" aria-hidden="true">
+        <span class="video-cover__wave"></span>
+        <span class="video-cover__play"></span>
+      </div>
+    @end
+    @if(duration)
+      <span
+        class="absolute right-4 bottom-4 min-w-14 rounded-[var(--radius-md)] bg-[#28223f] px-2.5 py-1 text-center text-xs leading-[18px] font-medium text-[var(--palette-white)]"
+      >
+        {{ duration }}
+      </span>
+    @end
+  </div>
+
+  <div class="flex min-w-0 flex-col gap-1.5 px-5 py-3 wrap-anywhere">
+    <h3
+      class="text-[20px] leading-7 font-bold text-[#28223f] dark:text-[var(--palette-ghost-white)]"
+    >
+      @if(hasLink)
+        @link({
+          href: $props.get('href') || urlFor($props.get('route'), $props.get('routeParams')),
+          class: 'after:absolute after:inset-0 after:rounded-[20px]',
+        })
+          {{ title }}
+        @end
+      @else
+        {{ title }}
+      @end
+    </h3>
+    @if(author || publishedAt)
+      <div
+        class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-[18px] font-medium text-[#71677f] dark:text-[#c2bbd5]"
+      >
+        @if(author)
+          <span>{{ author }}</span>
+        @end
+        @if(author && publishedAt)
+          <span aria-hidden="true">·</span>
+        @end
+        @if(publishedAt)
+          <time datetime="{{ publishedAt.toISO() }}">
+            {{ publishedAt.toRelative({ locale: 'pt-BR' }) }}
+          </time>
+        @end
+      </div>
+    @end
+  </div>
+</article>

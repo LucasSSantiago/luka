@@ -193,6 +193,47 @@ button {
 }
 
 /* Reusable UI blocks */
+.video-cover__art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--palette-periwinkle), var(--palette-ghost-white));
+}
+
+.video-cover__wave {
+  position: absolute;
+  top: 48%;
+  left: -25%;
+  width: 150%;
+  height: 130%;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 23%);
+  transform: rotate(-12deg);
+}
+
+.video-cover__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgb(255 255 255 / 75%);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 68%);
+  box-shadow: 0 8px 25px rgb(70 55 116 / 12%);
+}
+
+.video-cover__play::after {
+  content: '';
+  margin-left: 3px;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 11px solid #514279;
+}
+
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
