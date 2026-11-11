@@ -16,9 +16,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('dumper')
   </head>
-  <body>
+  <body class="flex min-h-screen flex-col">
     @!navbar($props.get('navbar', {}))
-    {{{ await $slots.main() }}}
+    <main class="flex-1">{{{ await $slots.main() }}}</main>
+    @!footer()
     @include('partials/flash_alerts')
   </body>
 </html>
