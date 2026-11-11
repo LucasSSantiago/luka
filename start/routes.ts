@@ -1,8 +1,10 @@
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
+const AdminUsersController = () =>
+  import('#controllers/admin/users_controller')
 
-router.on('/').render('pages/home').as('home')
+router.get('/', [controllers.Videos, 'index']).as('home')
 
 router
   .group(() => {
@@ -32,3 +34,14 @@ router
   router
   .get('/videos/:id/watch', [controllers.Videos, 'show'])
   .as('videos.show')
+
+  router
+  .group(() => {
+    router
+      .get('/usuarios', [AdminUsersController, 'index'])
+      .as('users.index')
+  })
+  .prefix('/admin')
+  .as('admin')
+  .use(middleware.auth())
+  .use(middleware.admin())

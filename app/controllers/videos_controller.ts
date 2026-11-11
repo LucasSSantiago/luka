@@ -111,4 +111,14 @@ export default class VideosController {
       playbackUrl
     })
   }
+
+  async index({ view }: HttpContext) {
+  const videos = await Video.query()
+    .where('status', 'ready')
+    .preload('user')
+    .orderBy('createdAt', 'desc')
+
+  return view.render('pages/home', { videos })
+  }
+
 }
